@@ -31,12 +31,6 @@ const LoginPage = () => {
     }
   };
 
-  const handleSignIn = () => {
-    // Handle the sign-in logic here
-    console.log("Sign In button clicked");
-    // You can navigate to a sign-up page or show a sign-up form
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen relative gap-10">
       <img
