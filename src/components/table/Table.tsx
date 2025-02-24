@@ -1,4 +1,3 @@
-// Updated Table component
 import React from "react";
 import { OrderInterface } from "../../services/intefaces";
 import { orderColumns } from "./columns";
@@ -16,7 +15,6 @@ interface TableProps {
 }
 
 const Table: React.FC<TableProps> = ({ orderData, filterDate, setFilterDate }) => {
-
   const table = useReactTable({
     data: orderData,
     columns: orderColumns,
@@ -39,53 +37,48 @@ const Table: React.FC<TableProps> = ({ orderData, filterDate, setFilterDate }) =
   });
 
   return (
-    <div className="overflow-x-auto">
-      <div className="border border-orange-500">
-        <div className="max-h-full">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-orange-500">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
+    <div className="overflow-x-auto border border-orange-500 rounded-lg">
+      <div className="max-h-[70vh] overflow-y-auto relative">
+        <table className="min-w-full">
+          <thead className="bg-orange-500 sticky top-0 z-10">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
                     <th
-                      key={header.id}
-                      className="px-4 py-2 border border-orange-500 text-center text-sm font-semibold text-white bg-orange-500"
-                      style={{ width: `${header.column.getSize()}px` }}
+                    key={header.id}
+                    className="px-5 md:px-0 py-2 md:py-4 border border-orange-500 text-center text-xs md:text-sm font-semibold text-white"
+                    style={{ width: `${header.column.getSize()}px` }}
                     >
-                      <div className="flex items-center justify-center">
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </div>
+                    <div className="flex items-center justify-center">
+                      {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                      )}
+                    </div>
                     </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
+                ))}
+              </tr>
+            ))}
+          </thead>
 
-            <tbody className="bg-white divide-y divide-gray-200">
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="px-4 py-2 border border-gray-300 text-sm text-gray-700 text-center"
-                      style={{ width: `${cell.column.getSize()}px` }}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
+            <tbody className="bg-white ">
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                key={cell.id}
+                className="px-0 md:px-4 py-2 border border-orange-500 text-xs md:text-sm text-gray-700 text-center"
+                >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
               ))}
+              </tr>
+            ))}
             </tbody>
-          </table>
-        </div>
+        </table>
       </div>
     </div>
   );
-
- 
 };
 
 export default Table;

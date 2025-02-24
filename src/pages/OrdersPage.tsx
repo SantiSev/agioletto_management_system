@@ -28,9 +28,7 @@ const OrdersPage = () => {
       <div className="flex justify-between items-center font-sans w-full h-fit my-4">
         <div className="w-full">
           <div className="flex justify-between items-center">
-            <div className="mt-4 flex items-center h-full">
-                <h1 className="text-orange-600 text-2xl md:text-3xl font-semibold">pedidos</h1>
-            </div>
+          <h1 className="text-orange-600 text-2xl md:text-3xl font-semibold flex items-center h-full">pedidos</h1>
             <Filter
               value={filterDate}
               onChange={setFilterDate}

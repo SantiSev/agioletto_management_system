@@ -7,8 +7,9 @@ export const orderColumns = [
     accessorKey: "etiquetas",
   },
   {
-    header: "Periodo de Semana",
+    header: "Periodo Semanal",
     accessorKey: "p_sem",
+    size: 270, // set column size for this column
     cell: ({ getValue }: { getValue: () => string }) => {
       const rawDate = getValue();
       if (!rawDate) return "-";
@@ -23,7 +24,6 @@ export const orderColumns = [
   {
     header: "Producto",
     accessorKey: "producto",
-    size: 50,
     meta: {
       className: "whitespace-normal break-words" // Allow wrapping
     }

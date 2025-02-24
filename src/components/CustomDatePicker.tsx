@@ -34,7 +34,7 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative px-2 md:px-0">
       <DatePicker
         selected={date}
         onChange={handleDateChange}
