@@ -10,7 +10,9 @@ type AuthContextType = {
   email: string | null;
   name: string | null;
   picture: string | null;
-  setAuthData: (email: string | null, name?: string | null, picture?: string | null) => void;
+  isAuthenticated: boolean;
+  login: (token: string, email: string, name?: string, picture?: string) => void;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,38 +21,62 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [email, setEmail] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [picture, setPicture] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
+    const storedToken = localStorage.getItem("authToken");
     const storedEmail = localStorage.getItem("userEmail");
     const storedName = localStorage.getItem("userName");
     const storedPicture = localStorage.getItem("userPicture");
 
-    if (storedEmail) setEmail(storedEmail);
-    if (storedName) setName(storedName);
-    if (storedPicture) setPicture(storedPicture);
+    if (storedToken) {
+      setToken(storedToken);
+      setEmail(storedEmail);
+      setName(storedName);
+      setPicture(storedPicture);
+    }
   }, []);
 
-  const handleSetAuthData = (
-    email: string | null,
-    name: string | null = null,
-    picture: string | null = null
+  const login = (
+    authToken: string,
+    userEmail: string,
+    userName?: string,
+    userPicture?: string
   ) => {
-    if (email) {
-      localStorage.setItem("userEmail", email);
-      if (name) localStorage.setItem("userName", name);
-      if (picture) localStorage.setItem("userPicture", picture);
-    } else {
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("userName");
-      localStorage.removeItem("userPicture");
-    }
-    setEmail(email);
-    setName(name);
-    setPicture(picture);
+    localStorage.setItem("authToken", authToken);
+    localStorage.setItem("userEmail", userEmail);
+    if (userName) localStorage.setItem("userName", userName);
+    if (userPicture) localStorage.setItem("userPicture", userPicture);
+    
+    setToken(authToken);
+    setEmail(userEmail);
+    setName(userName || null);
+    setPicture(userPicture || null);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userPicture");
+    
+    setToken(null);
+    setEmail(null);
+    setName(null);
+    setPicture(null);
+  };
+
+  const contextValue = {
+    email,
+    name,
+    picture,
+    isAuthenticated: !!token,
+    login,
+    logout
   };
 
   return (
-    <AuthContext.Provider value={{ email, name, picture, setAuthData: handleSetAuthData }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );

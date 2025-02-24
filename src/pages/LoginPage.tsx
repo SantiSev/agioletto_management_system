@@ -5,16 +5,28 @@ import { useAuth } from "../components/context/AuthProvider";
 import { jwtDecode } from "jwt-decode";
 
 const LoginPage = () => {
-  const { setAuthData } = useAuth();
+  const { login } = useAuth(); // Use the login function from AuthProvider
   const navigate = useNavigate();
 
   const handleLogin = async (credentialResponse: CredentialResponse) => {
-    if (credentialResponse.credential) {
-      const decodedToken: any = jwtDecode(credentialResponse.credential);
-      setAuthData(decodedToken.email, decodedToken.name, decodedToken.picture);
-      localStorage.setItem("authToken", credentialResponse.credential);
-      navigate("/employees");
-    } else {
+    try {
+      if (credentialResponse.credential) {
+        const decodedToken: any = jwtDecode(credentialResponse.credential);
+
+        // Use the login function from AuthProvider
+        login(
+          credentialResponse.credential, // token
+          decodedToken.email, // email
+          decodedToken.name, // name
+          decodedToken.picture // picture
+        );
+
+        navigate("/");
+      } else {
+        throw new Error("No credential received");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
       navigate("/error");
     }
   };
@@ -29,9 +41,10 @@ const LoginPage = () => {
     <div className="flex flex-col items-center justify-center min-h-screen relative gap-10">
       <img
         src={background_image}
-        alt=""
+        alt="Login background"
         className="absolute -z-10 top-0 left-0 w-full h-full object-cover blur-md"
       />
+
       <div className="flex flex-col items-center justify-center gap-2">
         <h1 className="text-7xl font-sans font-normal text-orange-500 drop-shadow-xl">
           agioletto
@@ -43,16 +56,14 @@ const LoginPage = () => {
 
       <GoogleLogin
         onSuccess={handleLogin}
-        onError={() => console.error("Login failed, please try again")}
-        text="continue_with" // This changes the button text to "Continue with Google"
+        onError={() => {
+          console.error("Login failed, please try again");
+          navigate("/error");
+        }}
+        text="continue_with"
+        useOneTap // Optional: Enable one-tap sign-in
       />
 
-      <button
-        onClick={handleSignIn}
-        className="mt-4 px-6 py-2 bg-transparent border border-white text-white rounded-lg hover:bg-white hover:text-orange-500 transition-colors duration-300"
-      >
-        No estas registrados? Cliquee aqui!
-      </button>
     </div>
   );
 };

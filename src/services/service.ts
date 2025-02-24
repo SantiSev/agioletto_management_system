@@ -11,18 +11,17 @@ export const fetchOrderData = async (
   const url = `${API_URL}action=fetchData&email=${email}`;
   try {
     const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const result: GetOrdersResponse = await response.json();
-
-    if (result.status !== 200) {
-      throw new Error(`Error fetching orders: ${result.status}`);
-    }
-
-    console.log("Data fetched successfully:", result.data);
     
-    return result.data;
+    if (response.ok) {
+      const result: GetOrdersResponse = await response.json();
+
+      if (result.status == 200) {
+        return result.data;
+      } else {
+        return [];
+      }
+    }
+    return null;
   } catch (error) {
     console.error("Failed to fetch data:", error);
     return null;
@@ -35,14 +34,12 @@ export const updateOrderStatus = async (
   status: string
 ): Promise<void> => {
   const url = `${API_URL}action=updateReadyStatus&id=${id}&listo=${status}`;
-  console.log("url", url);
 
   try {
     await fetch(url, {
       method: "POST",
     })
       .then((r) => r.json())
-      .then(console.log)
       .catch(console.error);
   } catch (error) {
     console.error("Failed to fetch data:", error);
@@ -59,14 +56,12 @@ export const updateDeliveryDate = async (
   }
   date = date ?? "";
   const url = `${API_URL}action=updateDeliveryDate&id=${id}&date=${date}`;
-  console.log("url", url);
 
   try {
     await fetch(url, {
       method: "POST",
     })
       .then((r) => r.json())
-      .then(console.log)
       .catch(console.error);
   } catch (error) {
     console.error("Failed to fetch data:", error);

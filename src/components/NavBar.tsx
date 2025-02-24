@@ -11,7 +11,7 @@ const NavBar: React.FC = () => {
         <h1 className="text-orange-500 text-3xl">agioletto</h1>
         <div className="text-center font-light">management system</div>
       </div>
-      <div className="hidden sm:block">
+      <div className="hidden sm:block absolute left-1/2 transform -translate-x-1/2">
         <h2 className="text-sm mt-1 border rounded-full px-7 py-1 bg-orange-600 shadow-black shadow-md text-white sm:text-xl">Hola, {name}</h2>
       </div>
       <DropDown>

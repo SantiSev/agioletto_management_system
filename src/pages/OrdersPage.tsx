@@ -4,6 +4,7 @@ import { useAuth } from "../components/context/AuthProvider";
 import Table from "../components/table/Table";
 import { OrderInterface } from "../services/intefaces";
 import Filter from "../components/table/Filter";
+import Loader from "../components/Loader";
 
 const OrdersPage = () => {
   const { email } = useAuth();
@@ -28,7 +29,7 @@ const OrdersPage = () => {
       <div className="flex justify-between items-center font-sans w-full h-fit my-4">
         <div className="w-full">
           <div className="flex justify-between items-center">
-          <h1 className="text-orange-600 text-2xl md:text-3xl font-semibold flex items-center h-full">pedidos</h1>
+            <h1 className="text-orange-600 text-2xl md:text-3xl font-semibold flex items-center h-full">pedidos</h1>
             <Filter
               value={filterDate}
               onChange={setFilterDate}
@@ -40,13 +41,21 @@ const OrdersPage = () => {
       </div>
 
       {data ? (
-        <Table
-          orderData={data}
-          filterDate={filterDate}
-          setFilterDate={setFilterDate}
-        />
+        data.length > 0 ? (
+          <Table
+            orderData={data}
+            filterDate={filterDate}
+            setFilterDate={setFilterDate}
+          />
+        ) : (
+          <div className="flex justify-center items-center h-full overflow-hidden">
+            <h1 className="font-bold text-sm lg:text-2xl text-orange-500 text-center mt-5 border border-orange-500 p-3 rounded-full  lg:px-7 ">Usted no fue asignado a ningun pedido, <br /> vuelva mas tarde!</h1>
+          </div>
+        )
       ) : (
-        <p>Loading data...</p>
+        <div className="flex justify-center items-center h-full overflow-hidden">
+          <Loader />
+        </div>
       )}
     </div>
   );

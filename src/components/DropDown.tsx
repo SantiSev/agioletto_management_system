@@ -1,11 +1,21 @@
 import { PiSignOutBold } from "react-icons/pi";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthProvider";
 
 interface DropDownProps {
   children: React.ReactNode;
 }
 
 export function DropDown({ children }: DropDownProps) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <Menu>
       <MenuButton>
@@ -18,12 +28,21 @@ export function DropDown({ children }: DropDownProps) {
         }
       >
         <MenuItem>
-          <a className="cursor-pointer flex gap-1 w-fit px-2 ">
-            <div className="text-2xl text-white shadow-lg">
-              <PiSignOutBold />
-            </div>
-            <div className="font-sans text-white font-semibold whitespace-nowrap">Log Out</div>
-          </a>
+          {({ active }) => (
+            <button
+              onClick={handleLogout}
+              className={`${
+                active ? 'bg-orange-600' : ''
+              } cursor-pointer flex gap-1 w-fit px-2`}
+            >
+              <div className="text-2xl text-white shadow-lg">
+                <PiSignOutBold />
+              </div>
+              <div className="font-sans text-white font-semibold whitespace-nowrap">
+                Log Out
+              </div>
+            </button>
+          )}
         </MenuItem>
       </MenuItems>
     </Menu>
