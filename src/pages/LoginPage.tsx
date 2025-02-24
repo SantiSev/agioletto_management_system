@@ -55,7 +55,6 @@ const LoginPage = () => {
           navigate("/error");
         }}
         text="continue_with"
-        useOneTap // Optional: Enable one-tap sign-in
       />
 
     </div>
