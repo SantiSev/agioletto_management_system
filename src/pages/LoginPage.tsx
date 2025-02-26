@@ -27,7 +27,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error("Login failed:", error);
-      navigate("/error");
+      navigate("/error", { state: { error: (error as Error).message } });
     }
   };
 
