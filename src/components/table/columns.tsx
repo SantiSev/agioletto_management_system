@@ -11,10 +11,14 @@ export const orderColumns = [
     accessorKey: "p_sem",
     size: 270, // set column size for this column
     cell: ({ getValue }: { getValue: () => string }) => {
-      const rawDate = getValue();
-      if (!rawDate) return "-";
-      const [year, month, day] = rawDate.split("T")[0].split("-");
-      return `${day}-${month}-${year}`;
+      try {
+        const rawDate = getValue();
+        if (!rawDate) return "-";
+        const [year, month, day] = rawDate.split("T")[0].split("-");
+        return `${day}-${month}-${year}`;
+      } catch (error) {
+        return "Fecha Invalido, debe ser formato dd/mm/yyyy";
+      }
     },
   },
   {
