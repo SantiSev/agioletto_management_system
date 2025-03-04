@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import background_image from "../assets/login_background.jpg";
 import { useAuth } from "../components/context/AuthProvider";
 import { jwtDecode } from "jwt-decode";
-import { isValidUser } from "../services/service";
+import { isValidUser } from "../services/loginService";
 
 const LoginPage = () => {
   const { login } = useAuth(); // Use the login function from AuthProvider
