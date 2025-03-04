@@ -3,6 +3,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { updateDeliveryDate } from "../services/service";
 import { es } from "date-fns/locale/es"; // Correctly import the Spanish locale
+import { useAuth } from "./context/AuthProvider";
 
 registerLocale("es", es);
 
@@ -15,6 +16,7 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
   currentRow,
 }) => {
+  const { email } = useAuth();
   const [date, setDate] = useState<Date | null>(
     selectedDate ? new Date(selectedDate) : null
   );
@@ -30,7 +32,7 @@ const CustomDatePicker: React.FC<DatePickerProps> = ({
           .padStart(2, "0")}-${newDate.getFullYear()}`
       : null; // Format as "DD-MM-YYYY"
 
-    updateDeliveryDate(currentRow, newDateString);
+    updateDeliveryDate(currentRow, newDateString, email);
   };
 
   return (

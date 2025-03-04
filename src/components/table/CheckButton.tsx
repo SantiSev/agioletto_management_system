@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { updateOrderStatus } from "../../services/service";
+import { useAuth } from "../context/AuthProvider";
 
 interface CheckButtonProps {
   status: string;
@@ -11,6 +12,7 @@ export const CheckButton: React.FC<CheckButtonProps> = ({
   status,
   currentRow,
 }) => {
+  const { email } = useAuth();
   const [currentState, setCurrentState] = useState<boolean>(status === "listo");
   const [isPending, setIsPending] = useState<boolean>(false); // Track API status
 
@@ -22,7 +24,11 @@ export const CheckButton: React.FC<CheckButtonProps> = ({
     setIsPending(true); // Show loading state
 
     try {
-      await updateOrderStatus(currentRow, newStatus);
+      if (email) {
+        await updateOrderStatus(currentRow, newStatus, email);
+      } else {
+        console.error("Email is null");
+      }
     } catch (error) {
       console.error("Failed to update status:", error);
       setCurrentState((prevState) => !prevState); // Revert on failure
