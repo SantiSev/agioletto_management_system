@@ -1,37 +1,9 @@
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import background_image from "../assets/sillas_imagen.jpg";
-import { useAuth } from "../components/context/AuthProvider";
-import { jwtDecode } from "jwt-decode";
 
 const ErrorPage = () => {
-  const { login } = useAuth(); // Use the login function from AuthProvider
-  const navigate = useNavigate();
   const location = useLocation();
   const errorMessage = location.state?.error || "An unknown error occurred";
-
-  const handleLogin = async (credentialResponse: CredentialResponse) => {
-    try {
-      if (credentialResponse.credential) {
-        const decodedToken: any = jwtDecode(credentialResponse.credential);
-
-        // Use the login function from AuthProvider
-        login(
-          credentialResponse.credential, // token
-          decodedToken.email, // email
-          decodedToken.name, // name
-          decodedToken.picture // picture
-        );
-
-        navigate("/");
-      } else {
-        throw new Error("No credential received");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      navigate("/error", { state: { error: (error as Error).message } });
-    }
-  };
 
   return (
     <>
@@ -58,16 +30,13 @@ const ErrorPage = () => {
             </p>
           )}
         </div>
+        <button
+          onClick={() => window.location.href = '/login'}
+          className="bg-white text-orange-500 font-semibold py-2 px-4 rounded-full border border-orange-500 hover:bg-orange-500 hover:text-white transition duration-300"
+        >
+          Volver al inicio de sesión
+        </button>
 
-        <GoogleLogin
-          onSuccess={handleLogin}
-          onError={() => {
-            const error = "Login failed, please try again";
-            console.error(error);
-            navigate("/error", { state: { error } });
-          }}
-          text="continue_with"
-        />
       </div>
     </>
   );
