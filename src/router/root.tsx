@@ -5,6 +5,7 @@ import ErrorPage from '../pages/ErrorPage';
 import AdminLayout from '../layouts/AdminLayout';
 import OrdersPage from '../pages/OrdersPage';
 import { useAuth } from '../components/context/AuthProvider';
+import UauthorizedPage from '../pages/Unauthorized';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
@@ -46,4 +47,8 @@ export const routes = createBrowserRouter([
     path: '/error',
     element: <ErrorPage />,
   },
+  {
+    path: '/unauthorized',
+    element: <UauthorizedPage/>,
+  }
 ]);

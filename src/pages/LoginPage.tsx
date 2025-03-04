@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import background_image from "../assets/login_background.jpg";
 import { useAuth } from "../components/context/AuthProvider";
 import { jwtDecode } from "jwt-decode";
+import { isValidUser } from "../services/service";
 
 const LoginPage = () => {
   const { login } = useAuth(); // Use the login function from AuthProvider
@@ -12,11 +13,20 @@ const LoginPage = () => {
     try {
       if (credentialResponse.credential) {
         const decodedToken: any = jwtDecode(credentialResponse.credential);
+        const userEmail = decodedToken.email;
 
-        // Use the login function from AuthProvider
+        // Validate if the email exists in your system
+        const isValid = await isValidUser(userEmail);
+        if (!isValid) {
+          console.error("Unauthorized user:", userEmail);
+          navigate("/unauthorized");
+          return;
+        }
+
+        // If valid, proceed with login
         login(
           credentialResponse.credential, // token
-          decodedToken.email, // email
+          userEmail, // email
           decodedToken.name, // name
           decodedToken.picture // picture
         );
