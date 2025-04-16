@@ -1,7 +1,5 @@
 import { GetOrdersResponse, OrderInterface } from "./intefaces";
 
-
-
 const API_URL = import.meta.env.VITE_SCRIPT_SHEETS_URL;
 const GET_DATA_ACTION = import.meta.env.VITE_GET_DATA_ACTION;
 const UPDATE_DELIVERY_ACTION = import.meta.env.VITE_UPDATE_DELIVERY_ACTION;
@@ -12,25 +10,22 @@ export const fetchOrderData = async (
   email: string
 ): Promise<OrderInterface[] | null> => {
   const url = `${API_URL}user=${email}&action=${GET_DATA_ACTION}`;
+
   try {
     const response = await fetch(url);
-    
-    if (response.ok) {
-      const result: GetOrdersResponse = await response.json();
+    if (!response.ok) return null;
 
-      if (result.status == 200) {
-        return result.data;
-      } else {
-        return [];
-      }
-    }
-    return null;
+    const result: GetOrdersResponse = await response.json();
+    if (result.status !== 200) return [];
+
+    return result.data.sort(
+      (a, b) => new Date(a.p_sem).getTime() - new Date(b.p_sem).getTime()
+    );
   } catch (error) {
     console.error("Failed to fetch data:", error);
     return null;
   }
 };
-
 
 export const updateOrderStatus = async (
   id: string,
@@ -72,7 +67,6 @@ export const updateDeliveryDate = async (
     console.error("Failed to fetch data:", error);
   }
 };
-
 
 export const isValidUser = async (email: string): Promise<boolean> => {
   const url = `${API_URL}user=${email}&action=${VALIDATE_ACTION}`;
